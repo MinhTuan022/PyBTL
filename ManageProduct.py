@@ -8,14 +8,6 @@ class ManageProduct:
 
     def add_product(self, product):
         self.products.append(product)
-        # existing_product = self.find_product(product.product_code)
-        #
-        # if existing_product:
-        #     print("==>Sản pẩm với mã {} đã tồn tại trong danh sách.".format(product.product_code))
-        # else:
-        #         self.products.append(product)
-        #         return True
-
     def find_product(self, product_code):
         for product in self.products:
             if product.product_code == product_code:
@@ -24,9 +16,9 @@ class ManageProduct:
 
     def display_products(self):
         if not self.products:
-            print("Không có sản phẩm nào")
+            print("\033[33mKhông có sản phẩm nào\033[0m")
         else:
-            print("\nDanh Sách Sản Phẩm Hiện Có:")
+            print("\n\033[34mDanh Sách Sản Phẩm Hiện Có:\033[0m")
             print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
                 "Mã Sản Phẩm", "Tên Sản Phẩm", "Giá Bán", "Giá Nhập", "Số Lượng", "Ngày Sản Xuất", "Ngày Hết Hạn"))
             print("-" * 130)
@@ -42,21 +34,21 @@ class ManageProduct:
         if product:
             for key, value in new_product_info.items():
                 setattr(product, key, value)
-            print("Thông tin sản phẩm đã được cập nhật.")
+            print("\033[32mThông tin sản phẩm đã được cập nhật.\033[0m")
         else:
-            print("Không tìm thấy sản phẩm.")
+            print("\033[33mKhông tìm thấy sản phẩm.\033[0m")
 
     def delete_product(self, product_code):
         product = self.find_product(product_code)
         if product:
             self.products.remove(product)
-            print("Sản phẩm đã được xoá khỏi danh sách.")
+            print("\033[32mSản phẩm đã được xoá khỏi danh sách.\033[0m")
         else:
-            print("Không tìm thấy sản phẩm.")
+            print("\033[33mKhông tìm thấy sản phẩm.\033[0m")
 
     def add_invoice(self, invoice):
         if self.invoice_exists(invoice.invoice_code):
-            print(f"Hóa đơn có mã {invoice.invoice_code} đã tồn tại trong hệ thống.")
+            print(f"\033[31mHóa đơn có mã {invoice.invoice_code} đã tồn tại trong hệ thống.\033[0m")
         else:
             self.invoices.append(invoice)
             return True
@@ -68,9 +60,9 @@ class ManageProduct:
 
     def display_invoices(self):
         if not self.invoices:
-            print("Không có hóa đơn nào.")
+            print("\033[33mKhông có hóa đơn nào.\033[0m")
         else:
-            print("Danh sách hóa đơn:")
+            print("\033[92m==>Danh sách hóa đơn:\033[0m")
             for invoice in self.invoices:
                 invoice.display_invoice_info()
     # def calculate_daily_revenue(self, date):
@@ -122,15 +114,15 @@ class ManageProduct:
                     product_price = product.selling_price * 0.725
                 soon_to_expire.append((product.product_code, product.product_name, product_price))
         if soon_to_expire:
-            print("Danh sách sản phẩm sắp hết hạn:")
+            print("\033[34mDanh sách sản phẩm sắp hết hạn:\033[0m")
             print("{:<10} {:<20} {:<20}".format("Mã Sản Phẩm", "Tên Sản Phẩm", "Giá Mới"))
             print("-" * 50)
             for product in soon_to_expire:
-                print("{:<10} {:<20} {} VNĐ".format(product[0], product[1], int(product[2])))
+                print("{:<10} {:<23} {:<20} VNĐ".format(product[0], product[1], int(product[2])))
 
     def validate_date_format(self, date_str):
         try:
             return datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
-            raise ValueError("Sai định dạng ngày. Vui lòng nhập theo định dạng YYYY-MM-DD.")
+            raise ValueError("\033[31mSai định dạng ngày. Vui lòng nhập theo định dạng YYYY-MM-DD.\033[0m")
 

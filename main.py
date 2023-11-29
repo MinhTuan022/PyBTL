@@ -46,14 +46,14 @@ def main():
     def input_non_empty(ip):
         value = input(ip).strip()
         while not value:
-            print("Không được để trống!, vui lòng nhập lại")
+            print("\033[31mKhông được để trống!, vui lòng nhập lại\033[0m")
             value = input(ip).strip()
         return value
 
     def input_positive(ip):
         value = input(ip).strip()
         while not value or float(value) <= 0 or int(value) <= 0:  # Kiểm tra xem giá trị có rỗng hoặc không lớn hơn 0 không
-            print("Giá trị phải lớn hơn 0 và không được để trống!")
+            print("\033[31mGiá trị phải lớn hơn 0 và không được để trống!\033[m")
             value = input(ip).strip()
         return value
 
@@ -65,11 +65,11 @@ def main():
                     datetime.strptime(date_input, '%Y-%m-%d')  # Kiểm tra định dạng ngày
                     return date_input
                 else:
-                    print("Không được để trống!")
+                    print("\033[31mKhông được để trống!\033[0m")
             except ValueError:
-                print("Ngày phải theo định dạng YYYY-MM-DD!")
+                print("\033[31mNgày phải theo định dạng YYYY-MM-DD!\033[0m")
     while True:
-        print("\n------ MENU ------")
+        print("\n\033[1;30;43m------ MENU ------\033[0m")
         print("1. Thêm sản phẩm")
         print("2. Tìm kiếm sản phẩm")
         print("3. Sửa thông tin sản phẩm")
@@ -83,7 +83,7 @@ def main():
         print("11. Tổng hợp những hàng hoá sắp hết hạn sử dụng")
         print("12. Thoát chương trình")
 
-        choice = input_non_empty("Nhập lựa chọn của bạn: ")
+        choice = input_non_empty("\033[35mNhập lựa chọn của bạn: \033[0m")
 
         if choice == "1":
             # Thêm sản phẩm
@@ -92,7 +92,7 @@ def main():
                     product_code = input_non_empty("Nhập mã sản phẩm: ")
                     existing_product = manager.find_product(product_code)
                     if existing_product:
-                        print(f"==>Sản pẩm với mã {product_code} đã tồn tại trong danh sách.")
+                        print(f"\033[31m==>Sản pẩm với mã {product_code} đã tồn tại trong danh sách.\033[0m")
                         break
                     product_name = input_non_empty("Nhập tên sản phẩm: ")
                     selling_price = int(input_positive("Nhập giá bán: "))
@@ -103,24 +103,23 @@ def main():
                         expiration_date = input_date("Nhập hạn sử dụng (YYYY-MM-DD): ")
                         try:
                             current_date = datetime.now().date()  # Lấy ngày hiện tại
-
                             if datetime.strptime(manufacture_date,
                                                  '%Y-%m-%d').date() > current_date:  # Kiểm tra ngày sản xuất và ngày hiện tại
-                                print("Ngày sản xuất phải nhỏ hơn ngày hiện tại! Vui lòng nhập lại.")
+                                print("\033[31mNgày sản xuất phải nhỏ hơn ngày hiện tại! Vui lòng nhập lại.\033[0m")
                             elif datetime.strptime(manufacture_date, '%Y-%m-%d').date() > datetime.strptime(
                                     expiration_date, '%Y-%m-%d').date():  # Kiểm tra ngày sản xuất và hạn sử dụng
-                                print("Ngày sản xuất phải nhỏ hơn ngày hết hạn! Vui lòng nhập lại.")
+                                print("\033[31mNgày sản xuất phải nhỏ hơn ngày hết hạn! Vui lòng nhập lại.\033[0m")
                             else:
                                 break  # Thoát vòng lặp khi nhập thông tin hợp lệ
                         except ValueError as e:
-                            print(f"Lỗi: {e}")
+                            print(f"\033[31mLỗi: {e}\033[0m")
                     new_product = Product(product_code, product_name, selling_price, buying_price, quantity,
                                           manufacture_date, expiration_date)
                     manager.add_product(new_product)
-                    print("==>Sản phẩm đã được thêm thành công.")
+                    print("\033[32m==>Sản phẩm đã được thêm thành công.\033[0m")
                     break
                 except ValueError:
-                    print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                    print("\033[31mGiá trị nhập vào không hợp lệ, vui lòng nhập lại\033[0m")
 
         elif choice == "2":
             # Tìm kiếm sản phẩm
@@ -129,10 +128,10 @@ def main():
                     search_code = input_non_empty("Nhập mã sản phẩm cần tìm kiếm: ")
                     break
                 except ValueError:
-                    print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                    print("\033[31mGiá trị nhập vào không hợp lệ, vui lòng nhập lại\033[0m")
             found_product = manager.find_product(search_code)
             if found_product:
-                print(f"Thông tin sản phẩm: ")
+                print(f"\033[34mThông tin sản phẩm: \033[0m")
                 print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
                     "Code", "Name", "Selling Price", "Purchase Price", "Quantity", "Production Date",
                     "Expiration Date"))
@@ -142,7 +141,7 @@ def main():
                     found_product.quantity, found_product.manufacture_date.strftime('%Y-%m-%d'),
                     found_product.expiration_date.strftime('%Y-%m-%d')))
             else:
-                print("Không tìm thấy sản phẩm.")
+                print("\033[33mKhông tìm thấy sản phẩm.\033[0m")
 
         elif choice == "3":
             # Sửa sản phẩm
@@ -161,10 +160,10 @@ def main():
                         }
                         break
                     except ValueError:
-                        print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                        print("\033[31mGiá trị nhập vào không hợp lệ, vui lòng nhập lại\033[0m")
                 manager.edit_product(product_code, new_info)
             else:
-                print("Không tìm thấy sản phẩm.")
+                print("\033[33mKhông tìm thấy sản phẩm.\033[0m")
 
         elif choice == "4":
             #Xóa sản phẩm
@@ -173,7 +172,7 @@ def main():
             if product:
                 manager.delete_product(product_code)
             else:
-                print("Không tìm thấy sản phẩm.")
+                print("\033[33mKhông tìm thấy sản phẩm.\033[0m")
 
         elif choice == "5":
             #Hiển thị danh sách sản phẩm
@@ -187,7 +186,7 @@ def main():
                     invoice_date = datetime.now().strftime('%Y-%m-%d')
                     break
                 except ValueError:
-                    print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                    print("\033[31mGiá trị nhập vào không hợp lệ, vui lòng nhập lại\033[0m")
 
             invoice = Invoice(invoice_code, invoice_date)
 
@@ -198,7 +197,7 @@ def main():
                         quantity = int(input_positive("Nhập số lượng: "))
                         break
                     except ValueError:
-                        print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                        print("\033[31mGiá trị nhập vào không hợp lệ, vui lòng nhập lại\033[0m")
 
                 product = manager.find_product(product_code)
                 if product:
@@ -207,17 +206,17 @@ def main():
                         invoice.add_item(product.product_code, product.product_name, quantity, product.selling_price,
                                          product.selling_price * quantity)
                         product.quantity -= quantity  # Giảm số lượng sản phẩm trong kho
-                        print(f"Đã thêm sản phẩm {product.product_name} vào hoá đơn.")
+                        print(f"\033[32mĐã thêm sản phẩm {product.product_name} vào hoá đơn.\033[0m")
                     else:
-                        print("Số lượng sản phẩm không đủ.")
+                        print("\033[33mSố lượng sản phẩm không đủ.\033[0m")
                 else:
-                    print("Không tìm thấy sản phẩm.")
+                    print("\033[33mKhông tìm thấy sản phẩm.\033[33m")
 
-                add_another = input_non_empty("Thêm sản phẩm khác vào hoá đơn? (Y/N): ")
+                add_another = input_non_empty("\033[35mThêm sản phẩm khác vào hoá đơn? (Y/N): \033[0m")
                 if add_another.lower() != 'y':
                     break
             if  manager.add_invoice(invoice):
-                print(f"Hóa đơn với mã {invoice.invoice_code} đã được thêm vào.")
+                print(f"\033[32mHóa đơn với mã {invoice.invoice_code} đã được thêm vào.\033[0m")
                 invoice.display_invoice_info()
         elif choice == "7":
             #Hiển thị danh sách sản phẩm
@@ -231,10 +230,10 @@ def main():
             # for product_code, revenue in revenue_by_product.items():
             #     print(f"Mã hàng hoá: {product_code}, Doanh thu: {revenue}")
 
-            reverse_sort = input_non_empty("Sắp xếp từ cao đến thấp (Y) hoặc từ thấp đến cao (N): ").lower()
+            reverse_sort = input_non_empty("\033[35mSắp xếp từ cao đến thấp (Y) hoặc từ thấp đến cao (N): \033[0m").lower()
             reverse = True if reverse_sort == 'y' else False
             sorted_products = manager.sort_product_revenue(reverse)
-            print("Sắp xếp tổng doanh thu từng mặt hàng:")
+            print("\033[34mSắp xếp tổng doanh thu từng mặt hàng:\033[0m")
             print("{:<20} {:<20} {}".format(
                 "Mã Hàng Hóa", "Tên Sản Phẩm", "Doanh Thu"))
             print("-"*50)
@@ -251,15 +250,15 @@ def main():
                     date = datetime.strptime(date_input, '%Y-%m-%d')
                     break
                 except ValueError:
-                    print("Giá trị nhập vào không hợp lệ")
+                    print("\033[31mGiá trị nhập vào không hợp lệ\033[0m")
             total_revenue = manager.calculate_daily_revenue(date)
-            print(f"Tổng doanh thu của cửa hàng trong ngày {date.date()}: {total_revenue} VNĐ")
+            print(f"\033[34mTổng doanh thu của cửa hàng trong ngày {date.date()}: {total_revenue} VNĐ\033[0m")
 
         elif choice == "10":
             # hiển thị 5 mặt hàng có doanh thu cao nhất, thấp nhât
-            print(f"Top 5 sản phẩm có doanh thu thấp nhất:")
+            print(f"\033[34mTop 5 sản phẩm có doanh thu thấp nhất:\033[0m")
             manager.display_top_products(5)
-            print(f"Top 5 sản phẩm có doanh thu cao nhất:")
+            print(f"\033[34mTop 5 sản phẩm có doanh thu cao nhất:\033[0m")
             manager.display_top_products(5, True)
 
         elif choice == "11":
@@ -267,10 +266,10 @@ def main():
             manager.display_expired_products()
 
         elif choice == "12":
-            print("Đã thoát chương trình.")
+            print("\033[33mĐã thoát chương trình.\033[0m")
 
         else:
-            print("Lựa chọn không hợp lệ, vui lòng chọn lại.")
+            print("\033[31mLựa chọn không hợp lệ, vui lòng chọn lại.\033[0m")
 
 
 if __name__ == "__main__":

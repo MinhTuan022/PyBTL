@@ -24,11 +24,11 @@ class Invoice:
         return sum(item.total_price for item in self.items)
 
     def display_invoice_info(self):
-        print("Mã Hóa Đơn: {}".format(self.invoice_code))
+        print("\033[94m***Mã Hóa Đơn: {}***\033[0m".format(self.invoice_code))
         print("Ngày xuất hóa đơn: {}".format(self.invoice_date.strftime('%Y-%m-%d')))
         print("Danh sách sản phẩm:")
         print("{:<15} {:<20} {:<15} {:<15} {:<15}".format(
-            "Tên Sản Phẩm", "Tên Sản Phẩm", "Số lượng bán", "Giá Bán", "Tổng Tiền"))
+            "Mã Sản Phẩm", "Tên Sản Phẩm", "Số lượng bán", "Giá Bán", "Tổng Tiền"))
         print("-" * 80)
         for item in self.items:
             unit_price = f"{item.unit_price} VNĐ"
