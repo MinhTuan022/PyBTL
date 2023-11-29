@@ -30,14 +30,14 @@ def main():
     manager.add_product(new_product10)
 
     invoice1 = Invoice("I1", "2023-10-01")
-    invoice1.add_item("P1", "Sữa", 10, 10, 100)
-    invoice1.add_item("P3", "Bánh quy", 5, 20, 100)
+    invoice1.add_item("P1", "Sữa", 10, 5000, 50000)
+    invoice1.add_item("P3", "Bánh quy", 5, 2000, 1000)
 
     invoice2 = Invoice("I2", "2023-10-05")
-    invoice2.add_item("P1", "Sữa", 20, 10, 200)
+    invoice2.add_item("P1", "Sữa", 20, 5000, 100000)
 
     invoice3 = Invoice("I3", "2023-10-10")
-    invoice3.add_item("P3", "Bánh quy", 10, 20, 200)
+    invoice3.add_item("P3", "Bánh quy", 10, 2000, 20000)
 
     # Thêm các hoá đơn vào danh sách hoá đơn trong quản lý hàng hoá
     manager.invoices.extend([invoice1, invoice2, invoice3])

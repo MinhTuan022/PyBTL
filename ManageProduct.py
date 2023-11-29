@@ -90,7 +90,7 @@ class ManageProduct:
     def calculate_daily_revenue(self, date):
         total_revenue = 0
         for invoice in self.invoices:
-            if invoice.invoice_date.date() == date.date():
+            if datetime.strptime(invoice.invoice_date, '%Y-%m-%d') == date:
                 total_revenue += invoice.calculate_total()
         return total_revenue
 
@@ -98,12 +98,12 @@ class ManageProduct:
         today = datetime.now()
         soon_to_expire = []
         for product in self.products:
-            days_to_expire = (product.expiration_date - today).days
+            days_to_expire = (datetime.strptime(product.expiration_date, '%Y-%m-%d') - today).days
             if days_to_expire <= 42 and days_to_expire > 0:
                 if days_to_expire <= 21:
                     product_price = product.selling_price * 0.431
                 else:
-                    product_price = product.selling_price * 0.769
+                    product_price = product.selling_price * 0.725
                 soon_to_expire.append((product.product_code, product.product_name, product_price))
         if soon_to_expire:
             print("Products soon to expire:")
