@@ -109,6 +109,8 @@ def main():
                             elif datetime.strptime(manufacture_date, '%Y-%m-%d').date() > datetime.strptime(
                                     expiration_date, '%Y-%m-%d').date():  # Kiểm tra ngày sản xuất và hạn sử dụng
                                 print("\033[31mNgày sản xuất phải nhỏ hơn ngày hết hạn! Vui lòng nhập lại.\033[0m")
+                            elif datetime.strptime(expiration_date,'%Y-%m-%d').date() < current_date:  # Kiểm tra ngày hết hạn
+                                print("\033[31mNgày hết hạn phải lớn hơn ngày hiện tại! Vui lòng nhập lại.\033[0m")
                             else:
                                 break  # Thoát vòng lặp khi nhập thông tin hợp lệ
                         except ValueError as e:
@@ -223,12 +225,6 @@ def main():
             manager.display_invoices()
         elif choice == "8":
             # Sắp xếp sản theo doanh thu từng sản phẩm
-            # date_input = input_non_empty("Nhập ngày (YYYY-MM-DD): ")
-            # date = datetime.strptime(date_input, '%Y-%m-%d')
-            # revenue_by_product = manager.calculate_daily_revenue(date)
-            # print("Tổng doanh thu theo ngày của từng mặt hàng:")
-            # for product_code, revenue in revenue_by_product.items():
-            #     print(f"Mã hàng hoá: {product_code}, Doanh thu: {revenue}")
 
             reverse_sort = input_non_empty("\033[35mSắp xếp từ cao đến thấp (Y) hoặc từ thấp đến cao (N): \033[0m").lower()
             reverse = True if reverse_sort == 'y' else False
@@ -241,8 +237,17 @@ def main():
                 product = manager.find_product(product_code)
                 print("{:<20} {:<20} {} VNĐ".format(
                     product_code, product.product_name, revenue))
-
         elif choice == "9":
+            date_input = input_non_empty("Nhập ngày (YYYY-MM-DD): ")
+            date = datetime.strptime(date_input, '%Y-%m-%d')
+            revenue_by_product = manager.calculate_daily_revenue_product(date)
+            print("\033[34mTổng doanh thu theo ngày của từng mặt hàng:\033[0m")
+            for product_code, revenue in revenue_by_product.items():
+                product = []
+                product = manager.find_product(product_code)
+                print(f"Mã hàng hoá: {product_code}, Tên Sản Phẩm: {product.product_name}, Doanh thu: {revenue}")
+
+        elif choice == "10":
             #Thống kê doanh thu theo sản phẩm
             while True:
                 try:
@@ -254,18 +259,18 @@ def main():
             total_revenue = manager.calculate_daily_revenue(date)
             print(f"\033[34mTổng doanh thu của cửa hàng trong ngày {date.date()}: {total_revenue} VNĐ\033[0m")
 
-        elif choice == "10":
+        elif choice == "11":
             # hiển thị 5 mặt hàng có doanh thu cao nhất, thấp nhât
             print(f"\033[34mTop 5 sản phẩm có doanh thu thấp nhất:\033[0m")
             manager.display_top_products(5)
             print(f"\033[34mTop 5 sản phẩm có doanh thu cao nhất:\033[0m")
             manager.display_top_products(5, True)
 
-        elif choice == "11":
+        elif choice == "12":
             # Tổng hợp sản phẩm hết hạn, fix giá
             manager.display_expired_products()
 
-        elif choice == "12":
+        elif choice == "13":
             print("\033[33mĐã thoát chương trình.\033[0m")
 
         else:

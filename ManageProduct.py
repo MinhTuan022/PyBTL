@@ -65,15 +65,15 @@ class ManageProduct:
             print("\033[92m==>Danh sách hóa đơn:\033[0m")
             for invoice in self.invoices:
                 invoice.display_invoice_info()
-    # def calculate_daily_revenue(self, date):
-    #     total_revenue = {}
-    #     for invoice in self.invoices:
-    #         if invoice.invoice_date.date() == date.date():
-    #             for item in invoice.items:
-    #                 if item.product_code not in total_revenue:
-    #                     total_revenue[item.product_code] = 0
-    #                 total_revenue[item.product_code] += item.total_price
-    #     return total_revenue
+    def calculate_daily_revenue_product(self, date):
+        total_revenue = {}
+        for invoice in self.invoices:
+            if invoice.invoice_date.date() == date.date():
+                for item in invoice.items:
+                    if item.product_code not in total_revenue:
+                        total_revenue[item.product_code] = 0
+                    total_revenue[item.product_code] += item.total_price
+        return total_revenue
 
     def sort_product_revenue(self, reverse=False):
         product_revenue = {}
