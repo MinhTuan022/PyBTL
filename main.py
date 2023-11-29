@@ -73,12 +73,11 @@ def main():
 
                     break
                 except ValueError:
-                    print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
+                    print("==>Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
 
-            new_product = Product(product_code, product_name, selling_price, buying_price, quantity, manufacture_date,
-                                  expiration_date)
-            manager.add_product(new_product)
-            print("Sản phẩm đã thêm thành công")
+            new_product = Product(product_code, product_name, selling_price, buying_price, quantity, manufacture_date,expiration_date)
+            if manager.add_product(new_product):
+                print("==>Sản phẩm đã được thêm thành công.")
 
         elif choice == "2":
             while True:
@@ -131,7 +130,8 @@ def main():
             while True:
                 try:
                     invoice_code = input("Nhập mã hoá đơn: ")
-                    invoice_date = datetime.strptime(input("Nhập ngày xuất hoá đơn (YYYY-MM-DD): "), '%Y-%m-%d')
+                    invoice_date = datetime.now().strftime('%Y-%m-%d')
+                    manager.validate_date_format(invoice_date)
                     break
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
@@ -163,9 +163,9 @@ def main():
                 add_another = input("Thêm sản phẩm khác vào hoá đơn? (Y/N): ")
                 if add_another.lower() != 'y':
                     break
-
-            manager.add_invoice(invoice)  # Thêm hoá đơn vào danh sách quản lý
-            invoice.display_invoice_info()
+            if  manager.add_invoice(invoice):
+                print(f"Invoice with code {invoice.invoice_code} has been added.")
+                invoice.display_invoice_info()
 
         elif choice == "7":
             # date_input = input("Nhập ngày (YYYY-MM-DD): ")
