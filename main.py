@@ -78,10 +78,11 @@ def main():
         print("6. Bán Hàng")
         print("7. Hiển thị danh sách hóa đơn")
         print("8. Sắp xếp tổng doanh thu từng mặt hàng")
-        print("9. Tính tổng doanh thu theo ngày của cửa hàng")
-        print("10. Hiển thị 5 mặt hàng có tổng doanh thu cao nhất và thấp nhất")
-        print("11. Tổng hợp những hàng hoá sắp hết hạn sử dụng")
-        print("12. Thoát chương trình")
+        print("9. Tính tổng doanh thu theo ngày của sản phẩm")
+        print("10. Tính tổng doanh thu theo ngày của cửa hàng")
+        print("11. Hiển thị 5 mặt hàng có tổng doanh thu cao nhất và thấp nhất")
+        print("12. Tổng hợp những hàng hoá sắp hết hạn sử dụng")
+        print("13. Thoát chương trình")
 
         choice = input_non_empty("\033[35mNhập lựa chọn của bạn: \033[0m")
 
@@ -92,7 +93,7 @@ def main():
                     product_code = input_non_empty("Nhập mã sản phẩm: ")
                     existing_product = manager.find_product(product_code)
                     if existing_product:
-                        print(f"\033[31m==>Sản pẩm với mã {product_code} đã tồn tại trong danh sách.\033[0m")
+                        print(f"\033[31m==>Sản phẩm với mã {product_code} đã tồn tại trong danh sách.\033[0m")
                         break
                     product_name = input_non_empty("Nhập tên sản phẩm: ")
                     selling_price = int(input_positive("Nhập giá bán: "))
@@ -272,10 +273,9 @@ def main():
 
         elif choice == "13":
             print("\033[33mĐã thoát chương trình.\033[0m")
-
+            break
         else:
             print("\033[31mLựa chọn không hợp lệ, vui lòng chọn lại.\033[0m")
-
 
 if __name__ == "__main__":
     main()
