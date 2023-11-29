@@ -98,8 +98,22 @@ def main():
                     selling_price = int(input_positive("Nhập giá bán: "))
                     buying_price = int(input_positive("Nhập giá nhập: "))
                     quantity = int(input_positive("Nhập số lượng: "))
-                    manufacture_date = input_date("Nhập ngày sản xuất (YYYY-MM-DD): ")
-                    expiration_date = input_date("Nhập hạn sử dụng (YYYY-MM-DD): ")
+                    while True:
+                        manufacture_date = input_date("Nhập ngày sản xuất (YYYY-MM-DD): ")
+                        expiration_date = input_date("Nhập hạn sử dụng (YYYY-MM-DD): ")
+                        try:
+                            current_date = datetime.now().date()  # Lấy ngày hiện tại
+
+                            if datetime.strptime(manufacture_date,
+                                                 '%Y-%m-%d').date() > current_date:  # Kiểm tra ngày sản xuất và ngày hiện tại
+                                print("Ngày sản xuất phải nhỏ hơn ngày hiện tại! Vui lòng nhập lại.")
+                            elif datetime.strptime(manufacture_date, '%Y-%m-%d').date() > datetime.strptime(
+                                    expiration_date, '%Y-%m-%d').date():  # Kiểm tra ngày sản xuất và hạn sử dụng
+                                print("Ngày sản xuất phải nhỏ hơn ngày hết hạn! Vui lòng nhập lại.")
+                            else:
+                                break  # Thoát vòng lặp khi nhập thông tin hợp lệ
+                        except ValueError as e:
+                            print(f"Lỗi: {e}")
                     new_product = Product(product_code, product_name, selling_price, buying_price, quantity,
                                           manufacture_date, expiration_date)
                     manager.add_product(new_product)
