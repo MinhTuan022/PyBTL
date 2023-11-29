@@ -191,7 +191,7 @@ def main():
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ")
             total_revenue = manager.calculate_daily_revenue(date)
-            print(f"Tổng doanh thu của cửa hàng trong ngày {date.date(8)}: {total_revenue}")
+            print(f"Tổng doanh thu của cửa hàng trong ngày {date.date()}: {total_revenue}")
 
         elif choice == "9":
             # hiển thị 5 mặt hàng có doanh thu cao nhất, thấp nhât
