@@ -1,8 +1,5 @@
 from datetime import datetime
 
-from Invoice import Invoice
-from Product import Product
-
 
 class ManageProduct:
     def __init__(self):
@@ -10,25 +7,14 @@ class ManageProduct:
         self.invoices = []
 
     def add_product(self, product):
-        existing_product = None
-        for p in self.products:
-            if p.product_code == product.product_code:
-                existing_product = p
-                break
-
-        if existing_product:
-            existing_product.quantity += product.quantity
-            existing_product.selling_price = product.selling_price
-            existing_product.buying_price = product.buying_price
-            existing_product.manufacture_date = product.manufacture_date
-            existing_product.expiration_date = product.expiration_date
-            print("==>Products with the code {} already exist in the list.".format(product.product_code))
-        else:
-            if product.manufacture_date > product.expiration_date:
-                print("==>Ngày sản xuất không được lớn hơn ngày hết hạn.")
-            else:
-                self.products.append(product)
-                return True
+        self.products.append(product)
+        # existing_product = self.find_product(product.product_code)
+        #
+        # if existing_product:
+        #     print("==>Sản pẩm với mã {} đã tồn tại trong danh sách.".format(product.product_code))
+        # else:
+        #         self.products.append(product)
+        #         return True
 
     def find_product(self, product_code):
         for product in self.products:
@@ -37,16 +23,19 @@ class ManageProduct:
         return None
 
     def display_products(self):
-        print("\nProduct List:")
-        print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
-            "Code", "Name", "Selling Price", "Purchase Price", "Quantity", "Production Date", "Expiration Date"))
-        print("-" * 130)
-        for product in self.products:
-            selling_price = f"{product.selling_price} VND"
-            buying_price = f"{product.buying_price} VND"
+        if not self.products:
+            print("Không có sản phẩm nào")
+        else:
+            print("\nDanh Sách Sản Phẩm Hiện Có:")
             print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
-                product.product_code, product.product_name, selling_price, buying_price,
-                product.quantity, product.manufacture_date.strftime('%Y-%m-%d'), product.expiration_date.strftime('%Y-%m-%d')))
+                "Mã Sản Phẩm", "Tên Sản Phẩm", "Giá Bán", "Giá Nhập", "Số Lượng", "Ngày Sản Xuất", "Ngày Hết Hạn"))
+            print("-" * 130)
+            for product in self.products:
+                selling_price = f"{product.selling_price} VNĐ"
+                buying_price = f"{product.buying_price} VNĐ"
+                print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
+                    product.product_code, product.product_name, selling_price, buying_price,
+                    product.quantity, product.manufacture_date.strftime('%Y-%m-%d'), product.expiration_date.strftime('%Y-%m-%d')))
 
     def edit_product(self, product_code, new_product_info):
         product = self.find_product(product_code)
@@ -67,7 +56,7 @@ class ManageProduct:
 
     def add_invoice(self, invoice):
         if self.invoice_exists(invoice.invoice_code):
-            print(f"Invoice with code {invoice.invoice_code} already exists.")
+            print(f"Hóa đơn có mã {invoice.invoice_code} đã tồn tại trong hệ thống.")
         else:
             self.invoices.append(invoice)
             return True
@@ -77,6 +66,13 @@ class ManageProduct:
                 return True
         return False
 
+    def display_invoices(self):
+        if not self.invoices:
+            print("Không có hóa đơn nào.")
+        else:
+            print("Danh sách hóa đơn:")
+            for invoice in self.invoices:
+                invoice.display_invoice_info()
     # def calculate_daily_revenue(self, date):
     #     total_revenue = {}
     #     for invoice in self.invoices:
@@ -100,12 +96,12 @@ class ManageProduct:
     def display_top_products(self, n, reverse=False):
         sorted_products = self.sort_product_revenue(reverse)
 
-        print("{:<10} {:<20} {:<20}".format("Code", "Name", "Revenue"))
+        print("{:<20} {:<20} {:<20}".format("Mã Sản Phẩm", "Tên Sản Phẩm", "Doanh Thu"))
         print("-" * 40)
         for i in range(min(n, len(sorted_products))):
             product_code, revenue = sorted_products[i]
             product = self.find_product(product_code)
-            print("{:<10} {:<20} {:<20}".format(product_code,product.product_name, revenue))
+            print("{:<20} {:<20} {:<20}".format(product_code,product.product_name, revenue))
 
     def calculate_daily_revenue(self, date):
         total_revenue = 0
@@ -127,10 +123,10 @@ class ManageProduct:
                 soon_to_expire.append((product.product_code, product.product_name, product_price))
         if soon_to_expire:
             print("Danh sách sản phẩm sắp hết hạn:")
-            print("{:<10} {:<20} {:<20}".format("Code", "Name", "New Price"))
+            print("{:<10} {:<20} {:<20}".format("Mã Sản Phẩm", "Tên Sản Phẩm", "Giá Mới"))
             print("-" * 50)
             for product in soon_to_expire:
-                print("{:<10} {:<20} {:<20}".format(product[0], product[1], product[2]))
+                print("{:<10} {:<20} {} VNĐ".format(product[0], product[1], int(product[2])))
 
     def validate_date_format(self, date_str):
         try:
