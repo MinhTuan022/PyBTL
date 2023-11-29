@@ -82,40 +82,28 @@ def main():
         print("10. Tổng hợp những hàng hoá sắp hết hạn sử dụng")
         print("11. Thoát chương trình")
 
-        choice = input_non_empty("Nhập lựa chọn của bạn: ")
+        choice = input("Nhập lựa chọn của bạn: ")
 
         if choice == "1":
-            # thêm sản phẩm
             while True:
                 try:
-                    product_code = input_non_empty("Nhập mã sản phẩm: ")
-                    product_name = input_non_empty("Nhập tên sản phẩm: ")
-                    selling_price = int(input_positive("Nhập giá bán: "))
-                    buying_price = int(input_positive("Nhập giá nhập: "))
-                    quantity = int(input_positive("Nhập số lượng: "))
-                    while True:
-                        manufacture_date = input_date("Nhập ngày sản xuất (YYYY-MM-DD): ")
-                        expiration_date = input_date("Nhập hạn sử dụng (YYYY-MM-DD): ")
-                        try:
-                            current_date = datetime.now().date() # Lấy ngày hiện tại
-
-                            if datetime.strptime(manufacture_date, '%Y-%m-%d').date() > current_date:  # Kiểm tra ngày sản xuất và ngày hiện tại
-                                print("Ngày sản xuất phải nhỏ hơn ngày hiện tại! Vui lòng nhập lại.")
-                            elif datetime.strptime(manufacture_date, '%Y-%m-%d').date() > datetime.strptime(expiration_date, '%Y-%m-%d').date():  # Kiểm tra ngày sản xuất và hạn sử dụng
-                                print("Ngày sản xuất phải nhỏ hơn ngày hết hạn! Vui lòng nhập lại.")
-                            else:
-                                break  # Thoát vòng lặp khi nhập thông tin hợp lệ
-                        except ValueError as e:
-                            print(f"Lỗi: {e}")
+                    product_code = input("Nhập mã sản phẩm: ")
+                    product_name = input("Nhập tên sản phẩm: ")
+                    selling_price = float(input("Nhập giá bán: "))
+                    buying_price = float(input("Nhập giá nhập: "))
+                    quantity = int(input("Nhập số lượng: "))
+                    manufacture_date = input("Nhập ngày sản xuất (YYYY-MM-DD): ")
+                    manager.validate_date_format(manufacture_date)
+                    expiration_date = input("Nhập hạn sử dụng (YYYY-MM-DD): ")
+                    manager.validate_date_format(expiration_date)
 
                     break
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
 
-            new_product = Product(product_code, product_name, selling_price, buying_price, quantity, manufacture_date,
-                                  expiration_date)
-            manager.add_product(new_product)
-            print("Sản phẩm đã thêm thành công")
+            new_product = Product(product_code, product_name, selling_price, buying_price, quantity, manufacture_date,expiration_date)
+            if manager.add_product(new_product):
+                print("==>Sản phẩm đã được thêm thành công.")
 
         elif choice == "2":
             #Tìm kiếm sản phẩm
@@ -178,8 +166,9 @@ def main():
             # Bán hàng - Thêm hóa đơn
             while True:
                 try:
-                    invoice_code = input_non_empty("Nhập mã hoá đơn: ")
-                    invoice_date = datetime.strptime(input_non_empty("Nhập ngày xuất hoá đơn (YYYY-MM-DD): "), '%Y-%m-%d')
+                    invoice_code = input("Nhập mã hoá đơn: ")
+                    invoice_date = datetime.now().strftime('%Y-%m-%d')
+                    manager.validate_date_format(invoice_date)
                     break
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
@@ -211,9 +200,9 @@ def main():
                 add_another = input_non_empty("Thêm sản phẩm khác vào hoá đơn? (Y/N): ")
                 if add_another.lower() != 'y':
                     break
-
-            manager.add_invoice(invoice)  # Thêm hoá đơn vào danh sách quản lý
-            invoice.display_invoice_info()
+            if  manager.add_invoice(invoice):
+                print(f"Invoice with code {invoice.invoice_code} has been added.")
+                invoice.display_invoice_info()
 
         elif choice == "7":
             # Sắp xếp sản theo doanh thu từng sản phẩm

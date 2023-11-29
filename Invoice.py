@@ -13,7 +13,7 @@ class InvoiceItem:
 class Invoice:
     def __init__(self, invoice_code, invoice_date):
         self.invoice_code = invoice_code
-        self.invoice_date = datetime.strptime(invoice_date,'%Y-%m-%d')
+        self.invoice_date = datetime.strptime(invoice_date, '%Y-%m-%d')
         self.items = []
 
     def add_item(self, product_code, product_name, quantity, unit_price, total_price):
@@ -31,7 +31,9 @@ class Invoice:
             "Product Code", "Product Name", "Quantity Sold", "Selling Price", "Total Price"))
         print("-" * 80)
         for item in self.items:
+            unit_price = f"{item.unit_price} VND"
+            total_price = f"{item.total_price} VND"
             print("{:<15} {:<20} {:<15} {:<15} {:<15}".format(
                 item.product_code, item.product_name, item.quantity,
-                item.unit_price, item.total_price))
+                unit_price, total_price))
         print("\nTotal Amount: {}".format(self.calculate_total()))

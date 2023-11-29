@@ -10,7 +10,25 @@ class ManageProduct:
         self.invoices = []
 
     def add_product(self, product):
-        self.products.append(product)
+        existing_product = None
+        for p in self.products:
+            if p.product_code == product.product_code:
+                existing_product = p
+                break
+
+        if existing_product:
+            existing_product.quantity += product.quantity
+            existing_product.selling_price = product.selling_price
+            existing_product.buying_price = product.buying_price
+            existing_product.manufacture_date = product.manufacture_date
+            existing_product.expiration_date = product.expiration_date
+            print("==>Products with the code {} already exist in the list.".format(product.product_code))
+        else:
+            if product.manufacture_date > product.expiration_date:
+                print("==>Ngày sản xuất không được lớn hơn ngày hết hạn.")
+            else:
+                self.products.append(product)
+                return True
 
     def find_product(self, product_code):
         for product in self.products:
@@ -24,8 +42,10 @@ class ManageProduct:
             "Code", "Name", "Selling Price", "Purchase Price", "Quantity", "Production Date", "Expiration Date"))
         print("-" * 130)
         for product in self.products:
+            selling_price = f"{product.selling_price} VND"
+            buying_price = f"{product.buying_price} VND"
             print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
-                product.product_code, product.product_name, product.selling_price, product.buying_price,
+                product.product_code, product.product_name, selling_price, buying_price,
                 product.quantity, product.manufacture_date.strftime('%Y-%m-%d'), product.expiration_date.strftime('%Y-%m-%d')))
 
     def edit_product(self, product_code, new_product_info):
@@ -46,7 +66,16 @@ class ManageProduct:
             print("Không tìm thấy sản phẩm.")
 
     def add_invoice(self, invoice):
-        self.invoices.append(invoice)
+        if self.invoice_exists(invoice.invoice_code):
+            print(f"Invoice with code {invoice.invoice_code} already exists.")
+        else:
+            self.invoices.append(invoice)
+            return True
+    def invoice_exists(self, invoice_code):
+        for inv in self.invoices:
+            if inv.invoice_code == invoice_code:
+                return True
+        return False
 
     # def calculate_daily_revenue(self, date):
     #     total_revenue = {}
