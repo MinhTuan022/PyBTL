@@ -13,7 +13,7 @@ class InvoiceItem:
 class Invoice:
     def __init__(self, invoice_code, invoice_date):
         self.invoice_code = invoice_code
-        self.invoice_date = invoice_date
+        self.invoice_date = datetime.strptime(invoice_date,'%Y-%m-%d')
         self.items = []
 
     def add_item(self, product_code, product_name, quantity, unit_price, total_price):

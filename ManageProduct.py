@@ -26,7 +26,7 @@ class ManageProduct:
         for product in self.products:
             print("{:<10} {:<20} {:<20} {:<20} {:<20} {:<20} {:<20}".format(
                 product.product_code, product.product_name, product.selling_price, product.buying_price,
-                product.quantity, product.manufacture_date, product.expiration_date))
+                product.quantity, product.manufacture_date.strftime('%Y-%m-%d'), product.expiration_date.strftime('%Y-%m-%d')))
 
     def edit_product(self, product_code, new_product_info):
         product = self.find_product(product_code)
@@ -70,27 +70,18 @@ class ManageProduct:
 
     def display_top_products(self, n, reverse=False):
         sorted_products = self.sort_product_revenue(reverse)
-        print(f"Top {n} Products by Revenue:")
+        print(f"Top {n} theo doanh thu sản phẩm:")
+        print("{:<10} {:<20} {:<20}".format("Code", "Name", "Revenue"))
+        print("-" * 40)
         for i in range(min(n, len(sorted_products))):
             product_code, revenue = sorted_products[i]
-            print(f"Product Code: {product_code}, Revenue: {revenue}")
-
-    def display_near_expiry(self, weeks_remaining):
-        today = datetime.now()
-        near_expiry_products = [product for product in self.products if
-                                (product.expiration_date - today).days // 7 == weeks_remaining]
-        if near_expiry_products:
-            print(f"Hàng hết hạn trong {weeks_remaining} tuần:")
-            for product in near_expiry_products:
-                print(
-                    f"Product Code: {product.product_code}, Product Name: {product.product_name}, Expiry Date: {product.expiration_date}")
-        else:
-            print("Không có sản phẩm nào sắp hết hạn.")
+            product = self.find_product(product_code)
+            print("{:<10} {:<20} {:<20}".format(product_code,product.product_name, revenue))
 
     def calculate_daily_revenue(self, date):
         total_revenue = 0
         for invoice in self.invoices:
-            if datetime.strptime(invoice.invoice_date, '%Y-%m-%d') == date:
+            if invoice.invoice_date.date() == date.date():
                 total_revenue += invoice.calculate_total()
         return total_revenue
 
@@ -98,7 +89,7 @@ class ManageProduct:
         today = datetime.now()
         soon_to_expire = []
         for product in self.products:
-            days_to_expire = (datetime.strptime(product.expiration_date, '%Y-%m-%d') - today).days
+            days_to_expire = (product.expiration_date - today).days
             if days_to_expire <= 42 and days_to_expire > 0:
                 if days_to_expire <= 21:
                     product_price = product.selling_price * 0.431
@@ -106,6 +97,14 @@ class ManageProduct:
                     product_price = product.selling_price * 0.725
                 soon_to_expire.append((product.product_code, product.product_name, product_price))
         if soon_to_expire:
-            print("Products soon to expire:")
+            print("Danh sách sản phẩm sắp hết hạn:")
+            print("{:<10} {:<20} {:<20}".format("Code", "Name", "New Price"))
+            print("-" * 50)
             for product in soon_to_expire:
-                print(f"Product Code: {product[0]}, Product Name: {product[1]}, New Price: {product[2]}")
+                print("{:<10} {:<20} {:<20}".format(product[0], product[1], product[2]))
+
+    def validate_date_format(self, date_str):
+        try:
+            return datetime.strptime(date_str, '%Y-%m-%d')
+        except ValueError:
+            raise ValueError("Sai định dạng ngày. Vui lòng nhập theo định dạng YYYY-MM-DD.")

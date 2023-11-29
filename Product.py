@@ -9,5 +9,6 @@ class Product:
         self.selling_price = selling_price
         self.buying_price = buying_price
         self.quantity = quantity
-        self.manufacture_date = manufacture_date
-        self.expiration_date = expiration_date
+        self.manufacture_date = datetime.strptime(manufacture_date, ''
+                                                                    '%Y-%m-%d')
+        self.expiration_date = datetime.strptime(expiration_date, '%Y-%m-%d')

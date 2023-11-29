@@ -66,8 +66,11 @@ def main():
                     selling_price = float(input("Nhập giá bán: "))
                     buying_price = float(input("Nhập giá nhập: "))
                     quantity = int(input("Nhập số lượng: "))
-                    manufacture_date = datetime.strptime(input("Nhập ngày sản xuất (YYYY-MM-DD): "), '%Y-%m-%d')
-                    expiration_date = datetime.strptime(input("Nhập hạn sử dụng (YYYY-MM-DD): "), '%Y-%m-%d')
+                    manufacture_date = input("Nhập ngày sản xuất (YYYY-MM-DD): ")
+                    manager.validate_date_format(manufacture_date)
+                    expiration_date = input("Nhập hạn sử dụng (YYYY-MM-DD): ")
+                    manager.validate_date_format(expiration_date)
+
                     break
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ, vui lòng nhập lại")
@@ -99,7 +102,7 @@ def main():
                         new_info = {
                             "product_name": input("Nhập tên sản phẩm mới: "),
                             "selling_price": float(input("Nhập giá bán mới: ")),
-                            "buying_price": float(input("Nập giá mua mới: ")),
+                            "buying_price": float(input("Nhập giá mua mới: ")),
                             "quantity": int(input("Nhập số lượng sản phẩm mới: ")),
                             "manufacture_date": datetime.strptime(input("Nhập vào ngày sản xuất (YYYY-MM-DD): "), '%Y-%m-%d'),
                             "expiration_date": datetime.strptime(input("Nhập vào ngày hết hạn(YYYY-MM-DD): "), '%Y-%m-%d')
@@ -188,7 +191,7 @@ def main():
                 except ValueError:
                     print("Giá trị nhập vào không hợp lệ")
             total_revenue = manager.calculate_daily_revenue(date)
-            print(f"Tổng doanh thu của cửa hàng trong ngày {date}: {total_revenue}")
+            print(f"Tổng doanh thu của cửa hàng trong ngày {date.date(8)}: {total_revenue}")
 
         elif choice == "9":
             # hiển thị 5 mặt hàng có doanh thu cao nhất, thấp nhât
