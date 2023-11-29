@@ -70,7 +70,7 @@ class ManageProduct:
 
     def display_top_products(self, n, reverse=False):
         sorted_products = self.sort_product_revenue(reverse)
-        print(f"Top {n} theo doanh thu sản phẩm:")
+
         print("{:<10} {:<20} {:<20}".format("Code", "Name", "Revenue"))
         print("-" * 40)
         for i in range(min(n, len(sorted_products))):
@@ -108,3 +108,4 @@ class ManageProduct:
             return datetime.strptime(date_str, '%Y-%m-%d')
         except ValueError:
             raise ValueError("Sai định dạng ngày. Vui lòng nhập theo định dạng YYYY-MM-DD.")
+
